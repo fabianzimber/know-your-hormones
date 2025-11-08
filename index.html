@@ -1,0 +1,578 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kompendium: Neurotransmitter</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- D3.js CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- Inter-Schriftart entfernt -->
+    <style>
+        body {
+            font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+            background-color: #f3f4f6; /* Tailwind 'gray-100' */
+        }
+        /* Benutzerdefinierte Farben für die Karten, matter und professioneller */
+        .card-dopamin { border-top: 4px solid #334155; /* slate-700 */ }
+        .card-noradrenalin { border-top: 4px solid #0f766e; /* teal-700 */ }
+        .card-serotonin { border-top: 4px solid #b45309; /* amber-700 */ }
+        .card-melatonin { border-top: 4px solid #4338ca; /* indigo-700 */ }
+
+        .symptom-list li {
+            position: relative;
+            padding-left: 1.75rem; /* Platz für das Icon */
+            margin-bottom: 0.5rem;
+        }
+        .symptom-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1.25rem;
+            height: 1.25rem;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        /* Icons für die Listen, professionellere Symbole und dunklere Farben */
+        .list-mangel li::before {
+            content: '–'; /* Minus-Zeichen als einfaches Icon */
+            color: #991b1b; /* red-800 */
+            font-weight: bold;
+        }
+        .list-positiv li::before {
+            content: '+'; /* Plus-Zeichen */
+            color: #166534; /* green-800 */
+            font-weight: bold;
+        }
+        .list-ueberdosis li::before {
+            content: '▲'; /* Warn-Icon */
+            color: #9a3412; /* orange-800 */
+        }
+        
+        /* CSS-Grid für die Heatmap */
+        .heatmap-container {
+            display: grid;
+            grid-template-columns: 1fr repeat(6, 1fr); /* 1 Label-Spalte, 6 Daten-Spalten */
+            grid-template-rows: auto repeat(4, 1fr); /* 1 Header-Zeile, 4 Daten-Zeilen */
+            gap: 2px;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* Zurück zu sans-serif für bessere Lesbarkeit in Tabellen */
+        }
+        .heatmap-header, .heatmap-label, .heatmap-cell {
+            padding: 0.75rem 0.5rem;
+            text-align: center;
+            background-color: #fff;
+            border: 1px solid #e5e7eb; /* gray-200 */
+        }
+        .heatmap-header {
+            font-weight: 600;
+            font-size: 0.875rem;
+            background-color: #f9fafb; /* gray-50 */
+        }
+        .heatmap-label {
+            font-weight: 600;
+            text-align: right;
+            background-color: #f9fafb; /* gray-50 */
+        }
+        .heatmap-cell {
+            color: #fff; /* Textfarbe wird hell auf dunklem Grund */
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        /* Leere Ecke */
+        .heatmap-corner {
+            background-color: transparent;
+            border: none;
+        }
+
+        /* Versteckt den Standard-Marker des <details> Elements */
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+
+        /* NEU: Stile für Sprachumschalter */
+        .lang-btn {
+            font-family: ui-sans-serif, system-ui; /* Sans-serif für UI */
+            font-weight: 500;
+        }
+        .lang-btn.active {
+            font-weight: 700;
+            color: #111827; /* black */
+        }
+        
+        /* NEU: Regeln zur Sichtbarkeit der Sprache */
+        /* Standard: Deutsch anzeigen, Englisch ausblenden */
+        .lang-en { display: none; }
+        .lang-de { display: unset; }
+
+        /* Wenn Englisch aktiv ist: Englisch anzeigen, Deutsch ausblenden */
+        body.lang-en-active .lang-en { display: unset; }
+        body.lang-en-active .lang-de { display: none; }
+    </style>
+</head>
+<body class="text-gray-800 p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto relative"> <!-- NEU: relative für Positionierung des Schalters -->
+        <header class="text-center mb-10">
+            <!-- NEU: Sprachumschalter -->
+            <!-- POSITION GEÄNDERT: Nicht mehr 'absolute', wird nach p verschoben -->
+            <!-- div class="lang-switcher absolute top-0 right-0 p-4" ... /div -->
+
+            <h1 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-2 mt-10"> <!-- NEU: mt-10 für Abstand -->
+                <span class="lang-de">Kompendium: Neurotransmitter & Psychophysiologie</span>
+                <span class="lang-en">Compendium: Neurotransmitters & Psychophysiology</span>
+            </h1>
+            <p class="text-lg text-gray-600">
+                <span class="lang-de">Eine Analyse assoziierter Systeme und Störungsbilder</span>
+                <span class="lang-en">An Analysis of Associated Systems and Disorders</span>
+            </p>
+
+            <!-- NEU: Sprachumschalter HIER platziert und Klassen geändert -->
+            <div class="lang-switcher mt-4 flex justify-center items-center">
+                <button data-lang="de" class="lang-btn active p-2">DE</button>
+                <span class="text-gray-400 mx-1">/</span>
+                <button data-lang="en" class="lang-btn p-2 text-gray-500">EN</button>
+            </div>
+        </header>
+
+        <!-- Haupt-Raster für die vier Botenstoffe -->
+        <main class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+
+            <!-- Dopamin Karte -->
+            <div class="bg-white border border-gray-300 rounded-md overflow-hidden card-dopamin">
+                <div class="p-6">
+                    <h2 class="text-3xl font-bold text-slate-700 mb-4">Dopamin</h2>
+                    <p class="text-gray-600 mb-6">
+                        <span class="lang-de">Zentraler Katecholamin-Neurotransmitter für Motivation, Belohnungsantizipation und motorische Steuerung.</span>
+                        <span class="lang-en">Central catecholamine neurotransmitter for motivation, reward anticipation, and motor control.</span>
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-red-800">
+                                <span class="lang-de">Defizit-Symptomatik</span>
+                                <span class="lang-en">Deficiency Symptoms</span>
+                            </h3>
+                            <ul class="symptom-list list-mangel text-gray-700">
+                                <li><span class="lang-de">Antriebsdefizit, Amotivation</span><span class="lang-en">Lack of Drive, Amotivation</span></li>
+                                <li><span class="lang-de">Kognitive Dysfunktion (Fokus)</span><span class="lang-en">Cognitive Dysfunction (Focus)</span></li>
+                                <li><span class="lang-de">Anhedonie (Unfähigkeit, Freude zu empfinden)</span><span class="lang-en">Anhedonia (Inability to feel pleasure)</span></li>
+                                <li><span class="lang-de">Affektverflachung, depressive Symptomatik</span><span class="lang-en">Blunted Affect, Depressive Symptoms</span></li>
+                                <li><span class="lang-de">Psychomotorische Störungen (z.B. Tremor, Rigidität)</span><span class="lang-en">Psychomotor Impairment (e.g., Tremor, Rigidity)</span></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-green-800">
+                                <span class="lang-de">Kernfunktionen</span>
+                                <span class="lang-en">Core Functions</span>
+                            </h3>
+                            <ul class="symptom-list list-positiv text-gray-700">
+                                <li><span class="lang-de">Modulation von Motivation & Antrieb</span><span class="lang-en">Modulation of Motivation & Drive</span></li>
+                                <li><span class="lang-de">Verstärkungslernen (Belohnungsantizipation)</span><span class="lang-en">Reinforcement Learning (Reward Anticipation)</span></li>
+                                <li><span class="lang-de">Fördert kognitive Exekutivfunktionen</span><span class="lang-en">Promotes Cognitive Executive Functions</span></li>
+                                <li><span class="lang-de">Regulation der Feinmotorik</span><span class="lang-en">Regulation of Fine Motor Skills</span></li>
+                                <li><span class="lang-de">Affektive Regulation</span><span class="lang-en">Affective Regulation</span></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-orange-800">
+                                <span class="lang-de">Symptome bei Hyperaktivität</span>
+                                <span class="lang-en">Symptoms of Hyperactivity</span>
+                            </h3>
+                            <ul class="symptom-list list-ueberdosis text-gray-700">
+                                <li><span class="lang-de">Positivsymptomatik (Psychose, Halluzinationen)</span><span class="lang-en">Positive Symptoms (Psychosis, Hallucinations)</span></li>
+                                <li><span class="lang-de">Störung der Impulskontrolle, Suchtpotenzial</span><span class="lang-en">Impulse Control Disorder, Addictive Potential</span></li>
+                                <li><span class="lang-de">Psychomotorische Agitation, Tics</span><span class="lang-en">Psychomotor Agitation, Tics</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Noradrenalin Karte -->
+            <div class="bg-white border border-gray-300 rounded-md overflow-hidden card-noradrenalin">
+                <div class="p-6">
+                    <h2 class="text-3xl font-bold text-teal-700 mb-4">
+                        <span class="lang-de">Noradrenalin</span>
+                        <span class="lang-en">Norepinephrine</span>
+                    </h2>
+                    <p class="text-gray-600 mb-6">
+                        <span class="lang-de">Katecholamin-Neurotransmitter des sympathischen Nervensystems; zentral für Vigilanz und Stressreaktionen.</span>
+                        <span class="lang-en">Catecholamine neurotransmitter of the sympathetic nervous system; central for vigilance and stress responses.</span>
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-red-800">
+                                <span class="lang-de">Defizit-Symptomatik</span>
+                                <span class="lang-en">Deficiency Symptoms</span>
+                            </h3>
+                            <ul class="symptom-list list-mangel text-gray-700">
+                                <li><span class="lang-de">Lethargie, Antriebsarmut</span><span class="lang-en">Lethargy, Lack of Drive</span></li>
+                                <li><span class="lang-de">Defizite der Exekutivfunktionen (Gedächtnis)</span><span class="lang-en">Executive Function Deficits (Memory)</span></li>
+                                <li><span class="lang-de">Depressive Stimmung</span><span class="lang-en">Depressive Mood</span></li>
+                                <li><span class="lang-de">Reduzierte Stressresilienz</span><span class="lang-en">Reduced Stress Resilience</span></li>
+                                <li><span class="lang-de">Orthostatische Hypotonie</span><span class="lang-en">Orthostatic Hypotension</span></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-green-800">
+                                <span class="lang-de">Kernfunktionen</span>
+                                <span class="lang-en">Core Functions</span>
+                            </h3>
+                            <ul class="symptom-list list-positiv text-gray-700">
+                                <li><span class="lang-de">Steigerung von Vigilanz & Arousal</span><span class="lang-en">Increase in Vigilance & Arousal</span></li>
+                                <li><span class="lang-de">Sympathikus-Aktivierung (Fight-or-Flight)</span><span class="lang-en">Sympathetic Activation (Fight-or-Flight)</span></li>
+                                <li><span class="lang-de">Mobilisiert Energiereserven</span><span class="lang-en">Mobilizes Energy Reserves</span></li>
+                                <li><span class="lang-de">Verbessert selektive Aufmerksamkeit</span><span class="lang-en">Enhances Selective Attention</span></li>
+                                <li><span class="lang-de">Motivationale Antizipation</span><span class="lang-en">Motivational Anticipation</span></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-orange-800">
+                                <span class="lang-de">Symptome bei Hyperaktivität</span>
+                                <span class="lang-en">Symptoms of Hyperactivity</span>
+                            </h3>
+                            <ul class="symptom-list list-ueberdosis text-gray-700">
+                                <li><span class="lang-de">Anxiogene Wirkung, Panik-Symptomatik</span><span class="lang-en">Anxiogenic Effect, Panic Symptoms</span></li>
+                                <li><span class="lang-de">Hypertonie und Tachykardie</span><span class="lang-en">Hypertension and Tachycardia</span></li>
+                                <li><span class="lang-de">Psychomotorische Agitation, Tremor, Diaphorese</span><span class="lang-en">Psychomotor Agitation, Tremor, Diaphoresis</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Serotonin Karte -->
+            <div class="bg-white border border-gray-300 rounded-md overflow-hidden card-serotonin">
+                <div class="p-6">
+                    <h2 class="text-3xl font-bold text-amber-700 mb-4">Serotonin (5-HT)</h2>
+                    <p class="text-gray-600 mb-6">
+                        <span class="lang-de">Indolamin-Neurotransmitter mit breiter modulatorischer Funktion für Stimmung, Impulsivität und Schlaf.</span>
+                        <span class="lang-en">Indoleamine neurotransmitter with broad modulatory functions for mood, impulsivity, and sleep.</span>
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-red-800">
+                                <span class="lang-de">Defizit-Symptomatik</span>
+                                <span class="lang-en">Deficiency Symptoms</span>
+                            </h3>
+                            <ul class="symptom-list list-mangel text-gray-700">
+                                <li><span class="lang-de">Affektive Dysregulation, depressive Stimmung</span><span class="lang-en">Affective Dysregulation, Depressive Mood</span></li>
+                                <li><span class="lang-de">Anxiogene Dysregulation, Panikstörung</span><span class="lang-en">Anxiogenic Dysregulation, Panic Disorder</span></li>
+                                <li><span class="lang-de">Insomnie (Ein- & Durchschlafstörungen)</span><span class="lang-en">Insomnia (Sleep Onset & Maintenance)</span></li>
+                                <li><span class="lang-de">Reduzierte Nozizeptiv-Schwelle (Schmerz)</span><span class="lang-en">Reduced Nociceptive Threshold (Pain)</span></li>
+                                <li><span class="lang-de">Gastrointestinale Motilitätsstörung (z.B. IBS)</span><span class="lang-en">Gastrointestinal Motility Disorder (e.g., IBS)</span></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-green-800">
+                                <span class="lang-de">Kernfunktionen</span>
+                                <span class="lang-en">Core Functions</span>
+                            </h3>
+                            <ul class="symptom-list list-positiv text-gray-700">
+                                <li><span class="lang-de">Affektstabilisierung, anxiolytisch</span><span class="lang-en">Affect Stabilization, Anxiolytic</span></li>
+                                <li><span class="lang-de">Impulskontrolle, Reduktion von Aggression</span><span class="lang-en">Impulse Control, Reduction of Aggression</span></li>
+                                <li><span class="lang-de">Appetitregulation (Sättigungsgefühl)</span><span class="lang-en">Appetite Regulation (Satiety)</span></li>
+                                <li><span class="lang-de">Regulierung des Schlaf-Wach-Zyklus</span><span class="lang-en">Regulation of Sleep-Wake Cycle</span></li>
+                                <li><span class="lang-de">Modulation der Schmerzwahrnehmung</span><span class="lang-en">Modulation of Pain Perception</span></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-orange-800">
+                                <span class="lang-de">Serotonerges Syndrom (Toxizität)</span>
+                                <span class="lang-en">Serotonin Syndrome (Toxicity)</span>
+                            </h3>
+                            <ul class="symptom-list list-ueberdosis text-gray-700">
+                                <li><span class="lang-de">Myoklonus, Rigidität</span><span class="lang-en">Myoclonus, Rigidity</span></li>
+                                <li><span class="lang-de">Kognitive Beeinträchtigung, Agitation</span><span class="lang-en">Cognitive Impairment, Agitation</span></li>
+                                <li><span class="lang-de">Hyperthermie, Tachykardie, Diaphorese</span><span class="lang-en">Hyperthermia, Tachycardia, Diaphoresis</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Melatonin Karte -->
+            <div class="bg-white border border-gray-300 rounded-md overflow-hidden card-melatonin">
+                <div class="p-6">
+                    <h2 class="text-3xl font-bold text-indigo-700 mb-4">Melatonin</h2>
+                    <p class="text-gray-600 mb-6">
+                        <span class="lang-de">Hormon der Zirbeldrüse, primärer Taktgeber des zirkadianen Rhythmus und neuroprotektives Agens.</span>
+                        <span class="lang-en">Hormone of the pineal gland, primary pacemaker of the circadian rhythm and neuroprotective agent.</span>
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-red-800">
+                                <span class="lang-de">Symptome bei Dysregulation</span>
+                                <span class="lang-en">Symptoms of Dysregulation</span>
+                            </h3>
+                            <ul class="symptom-list list-mangel text-gray-700">
+                                <li><span class="lang-de">Chronische Insomnie</span><span class="lang-en">Chronic Insomnia</span></li>
+                                <li><span class="lang-de">Phasenverzögerung (DSPS)</span><span class="lang-en">Phase Delay (DSPS)</span></li>
+                                <li><span class="lang-de">Exzessive Tagesschläfrigkeit</span><span class="lang-en">Excessive Daytime Sleepiness</span></li>
+                                <li><span class="lang-de">Saisonale Affektive Störung (SAD)</span><span class="lang-en">Seasonal Affective Disorder (SAD)</span></li>
+                                <li><span class="lang-de">Immunmodulatorische Dysfunktion</span><span class="lang-en">Immunomodulatory Dysfunction</span></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-green-800">
+                                <span class="lang-de">Kernfunktionen</span>
+                                <span class="lang-en">Core Functions</span>
+                            </h3>
+                            <ul class="symptom-list list-positiv text-gray-700">
+                                <li><span class="lang-de">Zirkadiane Taktgebung (Chronobiologie)</span><span class="lang-en">Circadian Pacing (Chronobiology)</span></li>
+                                <li><span class="lang-de">Initiierung des Schlafprozesses (Schlafdruck)</span><span class="lang-en">Initiation of Sleep Process (Sleep Pressure)</span></li>
+                                <li><span class="lang-de">Verbesserung der Schlafarchitektur</span><span class="lang-en">Improvement of Sleep Architecture</span></li>
+                                <li><span class="lang-de">Antioxidative/Neuroprotektive Wirkung</span><span class="lang-en">Antioxidant/Neuroprotective Effect</span></li>
+                                <li><span class="lang-de">Immunmodulation</span><span class="lang-en">Immunomodulation</span></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-orange-800">
+                                <span class="lang-de">Symptome bei exogener Zufuhr</span>
+                                <span class="lang-en">Symptoms of Exogenous Intake</span>
+                            </h3>
+                            <ul class="symptom-list list-ueberdosis text-gray-700">
+                                <li><span class="lang-de">Sedierung am Folgetag ("Hangover")</span><span class="lang-en">Next-day Sedation ("Hangover")</span></li>
+                                <li><span class="lang-de">Kopfschmerzen und Schwindel</span><span class="lang-en">Headache and Dizziness</span></li>
+                                <li><span class="lang-de">Hypothermie (selten)</span><span class="lang-en">Hypothermia (rare)</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- NEU: Sektion für Heatmap -->
+        <section class="mt-12 lg:mt-16 bg-white border border-gray-300 rounded-md p-6 md:p-8">
+            <h2 class="text-3xl font-semibold text-gray-900 mb-6 text-center">
+                <span class="lang-de">Interaktionsmatrix: Neurotransmitter-Effekte</span>
+                <span class="lang-en">Interaction Matrix: Neurotransmitter Effects</span>
+            </h2>
+            <p class="text-center text-lg text-gray-600 mb-8 max-w-4xl mx-auto" style="font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;">
+                <span class="lang-de">Übersicht der primären modulatorischen Effekte von Neurotransmittern auf physiologische und psychologische Systeme. Die Werte stellen eine generalisierte Auswirkungsstärke dar.</span>
+                <span class="lang-en">Overview of the primary modulatory effects of neurotransmitters on physiological and psychological systems. The values represent a generalized impact strength.</span>
+            </p>
+
+            <div id="heatmap-container" class="heatmap-container">
+                <!-- Diese Zeile ist die obere linke Ecke -->
+                <div class="heatmap-corner"></div>
+                
+                <!-- Header-Zeile (Systeme/Spalten) -->
+                <div class="heatmap-header"><span class="lang-de">Stimmung</span><span class="lang-en">Mood</span></div>
+                <div class="heatmap-header"><span class="lang-de">Antrieb</span><span class="lang-en">Drive</span></div>
+                <div class="heatmap-header"><span class="lang-de">Schlaf</span><span class="lang-en">Sleep</span></div>
+                <div class="heatmap-header"><span class="lang-de">Kognition</span><span class="lang-en">Cognition</span></div>
+                <div class="heatmap-header"><span class="lang-de">Angst</span><span class="lang-en">Anxiety</span></div>
+                <div class="heatmap-header"><span class="lang-de">Schmerz</span><span class="lang-en">Pain</span></div>
+
+                <!-- Zeile 1: Dopamin -->
+                <div class="heatmap-label">Dopamine</div>
+                <div class="heatmap-cell" data-transmitter="Dopamin" data-system="Stimmung"></div>
+                <div class="heatmap-cell" data-transmitter="Dopamin" data-system="Antrieb"></div>
+                <div class="heatmap-cell" data-transmitter="Dopamin" data-system="Schlaf"></div>
+                <div class="heatmap-cell" data-transmitter="Dopamin" data-system="Kognition"></div>
+                <div class="heatmap-cell" data-transmitter="Dopamin" data-system="Angst"></div>
+                <div class="heatmap-cell" data-transmitter="Dopamin" data-system="Schmerz"></div>
+
+                <!-- Zeile 2: Noradrenalin -->
+                <div class="heatmap-label"><span class="lang-de">Noradrenalin</span><span class="lang-en">Norepinephrine</span></div>
+                <div class="heatmap-cell" data-transmitter="Noradrenalin" data-system="Stimmung"></div>
+                <div class="heatmap-cell" data-transmitter="Noradrenalin" data-system="Antrieb"></div>
+                <div class="heatmap-cell" data-transmitter="Noradrenalin" data-system="Schlaf"></div>
+                <div class="heatmap-cell" data-transmitter="Noradrenalin" data-system="Kognition"></div>
+                <div class="heatmap-cell" data-transmitter="Noradrenalin" data-system="Angst"></div>
+                <div class="heatmap-cell" data-transmitter="Noradrenalin" data-system="Schmerz"></div>
+
+                <!-- Zeile 3: Serotonin -->
+                <div class="heatmap-label">Serotonin</div>
+                <div class="heatmap-cell" data-transmitter="Serotonin" data-system="Stimmung"></div>
+                <div class="heatmap-cell" data-transmitter="Serotonin" data-system="Antrieb"></div>
+                <div class="heatmap-cell" data-transmitter="Serotonin" data-system="Schlaf"></div>
+                <div class="heatmap-cell" data-transmitter="Serotonin" data-system="Kognition"></div>
+                <div class="heatmap-cell" data-transmitter="Serotonin" data-system="Angst"></div>
+                <div class="heatmap-cell" data-transmitter="Serotonin" data-system="Schmerz"></div>
+
+                <!-- Zeile 4: Melatonin -->
+                <div class="heatmap-label">Melatonin</div>
+                <div class="heatmap-cell" data-transmitter="Melatonin" data-system="Stimmung"></div>
+                <div class="heatmap-cell" data-transmitter="Melatonin" data-system="Antrieb"></div>
+                <div class="heatmap-cell" data-transmitter="Melatonin" data-system="Schlaf"></div>
+                <div class="heatmap-cell" data-transmitter="Melatonin" data-system="Kognition"></div>
+                <div class="heatmap-cell" data-transmitter="Melatonin" data-system="Angst"></div>
+                <div class="heatmap-cell" data-transmitter="Melatonin" data-system="Schmerz"></div>
+            </div>
+            <p class="text-sm text-gray-500 mt-4 text-center" style="font-family: ui-sans-serif, system-ui;">
+                <span class="lang-de">Legende:</span><span class="lang-en">Legend:</span>
+                <span class="font-bold" style="color: #334155;">■</span> <span class="lang-de">Stark Fördernd (+2)</span><span class="lang-en">Strongly Promoting (+2)</span> |
+                <span class="font-bold" style="color: #991b1b;">■</span> <span class="lang-de">Stark Hemmend (-2)</span><span class="lang-en">Strongly Inhibiting (-2)</span> |
+                <span class="font-bold" style="color: #f1f5f9;">■</span> <span class="lang-de">Gering/Modulatorisch (0)</span><span class="lang-en">Low/Modulatory (0)</span>
+            </p>
+        </section>
+
+        <!-- Sektion für Zusammenhänge und Wechselwirkungen -->
+        <section class="mt-12 lg:mt-16 bg-white border border-gray-300 rounded-md p-6 md:p-8">
+            <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-6 text-center">
+                <span class="lang-de">Systemische Interdependenzen: Depression, ADHS & PTSD</span>
+                <span class="lang-en">Systemic Interdependencies: Depression, ADHD & PTSD</span>
+            </h2>
+            <p class="text-center text-lg text-gray-600 mb-8 max-w-4xl mx-auto">
+                <span class="lang-de">Moderne psychoneurobiologische Modelle überwinden die klassische Monoamin-Hypothese. Störungsbilder werden als Dysregulation eines vernetzten Systems verstanden, das Neurotransmitter-Interaktionen, die Hypothalamus-Hypophysen-Nebennierenrinden-Achse (HPA) und die circadiane Rhythmik umfasst.</span>
+                <span class="lang-en">Modern psychoneurobiological models transcend the classic monoamine hypothesis. Disorders are understood as dysregulations of a networked system, encompassing neurotransmitter interactions, the Hypothalamic-Pituitary-Adrenal (HPA) axis, and circadian rhythm.</span>
+            </p>
+
+            <!-- Accordion-Container für die neuen Inhalte -->
+            <div class="space-y-4 max-w-5xl mx-auto">
+                
+                <!-- Accordion Item 1: Depression -->
+                <details class="group bg-white rounded-md border border-gray-300 overflow-hidden">
+                    <summary class="flex justify-between items-center cursor-pointer p-4 font-semibold text-xl text-gray-800 hover:bg-gray-50 transition">
+                        <span class="lang-de">Depression, Insomnie & HPA-Achse</span>
+                        <span class="lang-en">Depression, Insomnia & HPA Axis</span>
+                        <span class="text-gray-600 transform transition-transform duration-200 group-open:rotate-90">►</span>
+                    </summary>
+                    <div class="p-5 pt-0 text-gray-700 space-y-4">
+                        <p><span class="lang-de">Die Monoamin-Hypothese (Serotonin, Noradrenalin, Dopamin-Defizit) wird heute als insuffizient betrachtet. Moderne Modelle ergänzen dies um eine chronische Dysregulation der Stressachse (HPA-Hyperaktivität), neuroinflammatorische Prozesse und eine Desynchronisation der inneren Uhr.</span><span class="lang-en">The monoamine hypothesis (deficiency in serotonin, norepinephrine, dopamine) is now considered insufficient. Modern models supplement this with chronic dysregulation of the stress axis (HPA hyperactivity), neuroinflammatory processes, and desynchronization of the internal clock.</span></p>
+                        <p><span class="lang-de">Insomnie ist hierbei nicht nur Symptom, sondern ein kausaler Faktor: Chronischer Schlafmangel induziert Stress, führt zur Überaktivität der HPA-Achse (erhöhtes Cortisol) und alteriert die Monoamin-Transmission, was das Risiko für depressive Episoden signifikant erhöht.</span><span class="lang-en">Insomnia is not just a symptom but a causal factor: chronic sleep deprivation induces stress, leads to HPA axis hyperactivity (elevated cortisol), and alters monoamine transmission, significantly increasing the risk for depressive episodes.</span></p>
+                        <p><span class="lang-de">Melatonin ist an dieser Schnittstelle ein kritischer Modulator. Unzureichende oder phasenverschobene Melatonin-Ausschüttung (z.B. durch Lichtexposition am Abend) korreliert direkt mit Insomnie und einem erhöhten Risiko für affektive Störungen.</span><span class="lang-en">Melatonin is a critical modulator at this interface. Insufficient or phase-shifted melatonin secretion (e.g., due to evening light exposure) correlates directly with insomnia and an increased risk for affective disorders.</span></p>
+                    </div>
+                </details>
+
+                <!-- Accordion Item 2: ADHS -->
+                <details class="group bg-white rounded-md border border-gray-300 overflow-hidden">
+                    <summary class="flex justify-between items-center cursor-pointer p-4 font-semibold text-xl text-gray-800 hover:bg-gray-50 transition">
+                        <span class="lang-de">ADHS & Phasenverzögerung</span>
+                        <span class="lang-en">ADHD & Phase Delay</span>
+                        <span class="text-gray-600 transform transition-transform duration-200 group-open:rotate-90">►</span>
+                    </summary>
+                    <div class="p-5 pt-0 text-gray-700 space-y-4">
+                        <p><span class="lang-de">Die Pathophysiologie der ADHS fokussiert auf eine dysexekutive Funktion des Präfrontalkortex (PFC). Dopamin-D1- und Noradrenalin-α2A-Rezeptoren sind dort entscheidend für Arbeitsgedächtnis, Fokussierung und Impulskontrolle. Eine suboptimale catecholaminerge Stimulation resultiert in einem labilen oder dysfunktionalen PFC-Netzwerk.</span><span class="lang-en">The pathophysiology of ADHD focuses on a dysexecutive function of the Prefrontal Cortex (PFC). Dopamine D1 and norepinephrine α2A receptors are crucial there for working memory, focus, and impulse control. Suboptimal catecholaminergic stimulation results in a labile or dysfunctional PFC network.</span></p>
+                        <p><span class="lang-de">Psychostimulanzien (z.B. Methylphenidat) und Noradrenalin-Wiederaufnahmehemmer (z.B. Atomoxetin) zielen darauf ab, die synaptische Konzentration von Dopamin und Noradrenalin im PFC zu erhöhen, um eine optimale postsynaptische Stimulation der D1/α2A-Rezeptoren zu gewährleisten.</span><span class="lang-en">Psychostimulants (e.g., Methylphenidate) and norepinephrine reuptake inhibitors (e.g., Atomoxetine) aim to increase the synaptic concentration of dopamine and norepinephrine in the PFC to ensure optimal postsynaptic stimulation of D1/α2A receptors.</span></p>
+                        <p><span class="lang-de">Klinisch relevant ist die hohe Komorbidität von ADHS mit circadianen Rhythmusstörungen. Viele Erwachsene zeigen eine signifikante Phasenverzögerung der Melatonin-Ausschüttung (Delayed-Sleep-Phase-Disorder, DSPS). Dies unterstreicht die enge Verknüpfung des Aufmerksamkeitsnetzwerks mit der chronobiologischen Taktgebung.</span><span class="lang-en">Clinically relevant is the high comorbidity of ADHD with circadian rhythm disorders. Many adults show a significant phase delay in melatonin secretion (Delayed-Sleep-Phase-Disorder, DSPS). This highlights the close link between the attention network and chronobiological pacing.</span></p>
+                    </div>
+                </details>
+
+                <!-- Accordion Item 3: Trauma (PTSD) -->
+                <details class="group bg-white rounded-md border border-gray-300 overflow-hidden">
+                    <summary class="flex justify-between items-center cursor-pointer p-4 font-semibold text-xl text-gray-800 hover:bg-gray-50 transition">
+                        <span class="lang-de">PTSD & Chronisches Hyperarousal</span>
+                        <span class="lang-en">PTSD & Chronic Hyperarousal</span>
+                        <span class="text-gray-600 transform transition-transform duration-200 group-open:rotate-90">►</span>
+                    </summary>
+                    <div class="p-5 pt-0 text-gray-700 space-y-4">
+                        <p><span class="lang-de">Die Posttraumatische Belastungsstörung (PTSD) ist neurobiologisch durch ein chronisches Hyperarousal gekennzeichnet. Das noradrenerge System (insb. Locus coeruleus) ist hyperaktiv, was zu Hypervigilanz, erhöhter Schreckreaktion (Startle-Response) und insbesondere zu Albträumen und fragmentiertem REM-Schlaf führt.</span><span class="lang-en">Post-Traumatic Stress Disorder (PTSD) is neurobiologically characterized by chronic hyperarousal. The noradrenergic system (esp. Locus Coeruleus) is hyperactive, leading to hypervigilance, an exaggerated startle response, and particularly to nightmares and fragmented REM sleep.</span></p>
+                        <p><span class="lang-de">Hohe nächtliche Noradrenalinspiegel halten den Körper im "Kampf oder Flucht"-Modus, unterdrücken die Melatonin-Synthese und stören die Konsolidierungsprozesse im REM-Schlaf. Die Wirksamkeit des α1-Adrenozeptor-Antagonisten Prazosin bei Trauma-Albträumen validiert diese Hypothese.</span><span class="lang-en">High nocturnal norepinephrine levels keep the body in "fight or flight" mode, suppress melatonin synthesis, and disrupt consolidation processes during REM sleep. The efficacy of the α1-adrenoceptor antagonist Prazosin for trauma-related nightmares validates this hypothesis.</span></p>
+                        <p><span class="lang-de">Langfristig manifestieren sich oft komplexe Dysregulationen: serotonerge Störungen (Angst, Reizbarkeit), catecholaminerge Übererregung (Hypervigilanz) und eine desynchronisierte circadiane Rhythmik mit gestörtem Melatoninprofil.</span><span class="lang-en">In the long term, complex dysregulations often manifest: serotonergic disturbances (anxiety, irritability), catecholaminergic hyperarousal (hypervigilance), and a desynchronized circadian rhythm with a disrupted melatonin profile.</span></p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Fazit / Gemeinsames Bild -->
+            <div class="mt-10 pt-6 border-t border-gray-300 max-w-5xl mx-auto">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">
+                    <span class="lang-de">Synthese: Ein integratives Modell</span>
+                    <span class="lang-en">Synthesis: An Integrative Model</span>
+                </h3>
+                <p class="text-gray-700 text-lg leading-relaxed">
+                    <span class="lang-de">Daraus ergibt sich ein integratives Modell: Dopamin und Noradrenalin bestimmen die Effizienz der Exekutivfunktionen des präfrontalen Cortex (PFC), relevant bei ADHS und Antriebsdefiziten. Serotonin moduliert die Affektregulation, Angst und Impulskontrolle und dient als biochemische Vorstufe für Melatonin. Melatonin als primärer Taktgeber (Zeitgeber) synchronisiert den Tag-Nacht-Rhythmus und die damit verbundenen neurobiologischen Reparaturphasen. Chronischer Stress, Traumata oder persistierende Schlafstörungen führen zur Desynchronisation dieses Systems: Melatoninphasen verschieben sich, Monoamin-Signale geraten in Dysbalance, die HPA-Achse hyperaktiviert wird – und je nach neurobiologischer Vulnerabilität kippt das System in Richtung einer affektiven Störung, einer ADHS-Symptomverstärkung oder eines Trauma-Spektrum-Bildes.</span>
+                    <span class="lang-en">This results in an integrative model: Dopamine and norepinephrine determine the efficiency of the executive functions of the prefrontal cortex (PFC), relevant in ADHD and drive deficits. Serotonin modulates affect regulation, anxiety, and impulse control, and serves as a biochemical precursor for melatonin. Melatonin, as the primary pacemaker (Zeitgeber), synchronizes the day-night rhythm and the associated neurobiological repair phases. Chronic stress, trauma, or persistent sleep disorders lead to the desynchronization of this system: melatonin phases shift, monoamine signals become imbalanced, the HPA axis becomes hyperactivated – and depending on neurobiological vulnerability, the system tips towards an affective disorder, ADHD symptom exacerbation, or a trauma-spectrum disorder.</span>
+                </p>
+            </div>
+
+        </section>
+
+        <footer class="text-center text-gray-500 mt-10">
+            <p>
+                <span class="lang-de">Diese Informationen dienen nur zu Bildungszwecken und ersetzen keine professionelle medizinische Beratung.</span>
+                <span class="lang-en">This information is for educational purposes only and does not replace professional medical advice.</span>
+            </p>
+        </footer>
+    </div>
+
+    <!-- D3.js Script zum Füllen der Heatmap UND Sprachumschaltung -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- NEU: Sprachumschalter-Logik ---
+            const langButtons = document.querySelectorAll('.lang-btn');
+            const body = document.body;
+
+            langButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const lang = button.getAttribute('data-lang');
+                    
+                    // Body-Klasse aktualisieren
+                    if (lang === 'en') {
+                        body.classList.add('lang-en-active');
+                    } else {
+                        body.classList.remove('lang-en-active');
+                    }
+                    
+                    // Aktiven Status der Buttons aktualisieren
+                    langButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.classList.add('text-gray-500');
+                    });
+                    button.classList.add('active');
+                    button.classList.remove('text-gray-500');
+                });
+            });
+
+            // --- Bestehende D3.js-Logik ---
+
+            // 1. Datenmatrix (Auswirkungsstärke)
+            // Legende: 2: Stark steigernd/fördernd, 1: Leicht steigernd, 0: Gering/Modulatorisch, -1: Leicht hemmend, -2: Stark hemmend/reduzierend
+            const data = {
+                'Dopamin': { 'Stimmung': 1, 'Antrieb': 2, 'Schlaf': -1, 'Kognition': 2, 'Angst': 0, 'Schmerz': 1 },
+                'Noradrenalin': { 'Stimmung': 1, 'Antrieb': 2, 'Schlaf': -1, 'Kognition': 2, 'Angst': 2, 'Schmerz': -1 },
+                'Serotonin': { 'Stimmung': 2, 'Antrieb': 0, 'Schlaf': 1, 'Kognition': 0, 'Angst': -2, 'Schmerz': -2 },
+                'Melatonin': { 'Stimmung': 0, 'Antrieb': -2, 'Schlaf': 2, 'Kognition': -1, 'Angst': 0, 'Schmerz': 0 }
+            };
+
+            // 2. Farbskala (Divergierend: Rot -> Hellgrau -> Dunkelblau/Slate)
+            // Passend zu den professionellen "matten" Farben
+            const colorScale = d3.scaleDiverging()
+                .domain([-2, 0, 2]) // -2 (negativ), 0 (neutral), 2 (positiv)
+                .interpolator(d3.interpolateHsl(
+                    d3.hsl('#991b1b'), // red-800 (stark hemmend)
+                    d3.hsl('#f1f5f9'), // slate-100 (neutral)
+                    d3.hsl('#334155')  // slate-700 (stark fördernd)
+                ));
+
+            // 3. D3-Datenbindung
+            d3.selectAll('.heatmap-cell')
+                .each(function() {
+                    const cell = d3.select(this);
+                    const transmitter = cell.attr('data-transmitter');
+                    const system = cell.attr('data-system');
+                    
+                    const value = data[transmitter] ? data[transmitter][system] : undefined;
+
+                    if (value !== undefined) {
+                        cell.style('background-color', colorScale(value));
+                        cell.text(value); // Wert in die Zelle schreiben
+                        
+                        // Textfarbe anpassen für bessere Lesbarkeit auf dunklem Grund
+                        if (Math.abs(value) > 1) {
+                            cell.style('color', '#ffffff'); // weiß
+                        } else {
+                            cell.style('color', '#374151'); // gray-700
+                        }
+                    } else {
+                        cell.style('background-color', '#f3f4f6'); // gray-100 (leer)
+                        cell.text('N/A');
+                    }
+                });
+        });
+    </script>
+
+</body>
+</html>
