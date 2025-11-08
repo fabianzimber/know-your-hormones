@@ -6,7 +6,7 @@
 
 An interactive one-page website that provides a compendium on neurotransmitters (dopamine, norepinephrine, serotonin, and melatonin) and their role in psychophysiology. The page analyzes symptoms of deficiency/excess, core functions, interactions, and systemic connections to disorders such as depression, ADHD, and PTSD. Developed as a responsive, accessible tool for educational purposes.
 
-**Live Demo:** [Open the Page](https://yourusername.github.io/yourrepo/) (replace with your GitHub Pages URL).
+**Live Demo:** [Open the Page]([https://yourusername.github.io/yourrepo/](https://fabianzimber.github.io/know-your-hormones/)) 
 
 ## Description
 
@@ -37,3 +37,53 @@ The page is designed as a "one-pager" – everything in one HTML file, ideal for
 ## Installation & Setup
 
 1. Clone the repository:
+> git clone https://github.com/yourusername/yourrepo.git
+2. Open `index.html` in your browser.
+3. (Optional) Deploy to GitHub Pages:
+- Go to Repository Settings > Pages.
+- Select the `main` branch and save.
+
+No further dependencies – all libraries (Tailwind, D3.js, Inter Font) are loaded via CDN.
+
+## Usage
+
+- **Switch Language:** Click on DE/EN in the header.
+- **Difficulty Level:** Choose "Advanced" or "Simple".
+- **Switch Theme:** Click on the icons (sun/moon/contrast) in the header (not visible in code, but expandable).
+- **Explore Heatmap:** The matrix shows effect strengths (-2 to +2); hover for details (CSS-based).
+- **Check Sources:** Hover over cited terms for tooltips with links.
+
+Example: Switch to "Dark Theme" for better readability in low light.
+
+## Technologies
+
+- **HTML5 & CSS3:** Structure and styling with CSS variables for theming.
+- **Tailwind CSS:** Utility-first CSS for responsive design (via CDN).
+- **D3.js:** For dynamic heatmap generation (via CDN).
+- **JavaScript:** Event listeners for switches (language, level, theme) and local storage (localStorage for theme).
+- **Fonts:** Inter via CDN for modern typography.
+- **Accessibility:** ARIA attributes implicit (expandable), High-Contrast mode.
+
+## Contribution
+
+Contributions are welcome! Follow these steps:
+
+1. Fork the repository.
+2. Create a branch: `git checkout -b feature/your-feature`.
+3. Commit your changes: `git commit -m 'Description'`.
+4. Push: `git push origin feature/your-feature`.
+5. Create a Pull Request.
+
+Please ensure clean code, source citations, and accessibility.
+
+## License
+
+This project is licensed under the Unlicense – see the file for details.
+
+## Acknowledgments
+
+- Based on evidence-based sources from PubMed, Nature, PMC, etc.
+- Inspired by modern psychoneurobiological models.
+- Created with ❤️ for education and science.
+
+If you have questions, open an issue or contact me!
