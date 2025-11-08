@@ -47,69 +47,7 @@
             --color-heatmap-pos-1: #64748b; /* slate-500 */
             --color-heatmap-pos-2: #334155; /* slate-700 */
             --color-heatmap-text-light: #ffffff;
-            --color-heatmap-text-dark: #ffffff; /* gray-600 */
-        }
-
-        /* 2. Dark Theme */
-        body.theme-dark {
-            --color-bg: #1f2937; /* gray-800 */
-            --color-bg-card: #374151; /* gray-700 */
-            --color-bg-header: #4b5563; /* gray-600 */
-            --color-bg-hover: #4b5563; /* gray-600 */
-            
-            --color-border: #6b7280; /* gray-500 */
-            --color-border-grid: #4b5563; /* gray-600 */
-            
-            --color-text-primary: #f9fafb; /* gray-50 */
-            --color-text-secondary: #d1d5db; /* gray-300 */
-            --color-text-muted: #6b7280; /* gray-500 */
-            --color-text-button: #d1d5db; /* gray-300 */
-            
-            --color-icon-mangel: #fca5a5; /* red-300 */
-            --color-icon-positiv: #86efac; /* green-300 */
-            --color-icon-ueberdosis: #fdba74; /* orange-300 */
-
-            --color-link: #a5b4fc; /* indigo-300 */
-            --color-citation-dot: #6b7280; /* gray-500 */
-
-            --color-heatmap-neg-2: #fca5a5; /* red-300 */
-            --color-heatmap-neg-1: #ef4444; /* red-500 */
-            --color-heatmap-0: #374151;     /* gray-700 */
-            --color-heatmap-pos-1: #94a3b8; /* slate-400 */
-            --color-heatmap-pos-2: #e2e8f0; /* slate-200 */
-            --color-heatmap-text-light: #ffffff;
-            --color-heatmap-text-dark: #1f2937; /* gray-800 */
-        }
-
-        /* 3. High-Contrast Theme */
-        body.theme-contrast {
-            --color-bg: #000000; /* black */
-            --color-bg-card: #000000; /* black */
-            --color-bg-header: #000000; /* black */
-            --color-bg-hover: #374151; /* gray-700 */
-            
-            --color-border: #ffffff; /* white */
-            --color-border-grid: #ffffff; /* white */
-            
-            --color-text-primary: #ffffff; /* white */
-            --color-text-secondary: #e5e7eb; /* gray-200 */
-            --color-text-muted: #9ca3af; /* gray-400 */
-            --color-text-button: #ffffff; /* white */
-            
-            --color-icon-mangel: #ffffff; /* white */
-            --color-icon-positiv: #ffffff; /* white */
-            --color-icon-ueberdosis: #ffffff; /* white */
-
-            --color-link: #a5b4fc; /* indigo-300 (hell für Kontrast) */
-            --color-citation-dot: #ffffff; /* white */
-
-            --color-heatmap-neg-2: #b91c1c; /* red-700 (Kontrastrot) */
-            --color-heatmap-neg-1: #dc2626; /* red-600 */
-            --color-heatmap-0: #4b5563;     /* gray-600 */
-            --color-heatmap-pos-1: #d1d5db; /* gray-300 */
-            --color-heatmap-pos-2: #ffffff; /* white */
-            --color-heatmap-text-light: #000000;
-            --color-heatmap-text-dark: #ffffff;
+            --color-heatmap-text-dark: #EEEEEE; /* gray-600 */
         }
 
 
@@ -910,45 +848,6 @@
                     button.classList.add('active');
                 });
             });
-
-            // --- NEU: Theme-Umschalter-Logik ---
-            const themeButtons = document.querySelectorAll('.theme-btn');
-            
-            // 1. Funktion zum Anwenden des Themes
-            function applyTheme(theme) {
-                // Klassen auf Body setzen
-                body.classList.remove('theme-dark', 'theme-contrast');
-                if (theme === 'dark') {
-                    body.classList.add('theme-dark');
-                } else if (theme === 'contrast') {
-                    body.classList.add('theme-contrast');
-                }
-                
-                // Aktiven Button-Status aktualisieren
-                themeButtons.forEach(btn => {
-                    if (btn.getAttribute('data-theme') === theme) {
-                        btn.classList.add('active');
-                    } else {
-                        btn.classList.remove('active');
-                    }
-                });
-                
-                // Theme im localStorage speichern
-                localStorage.setItem('theme', theme);
-            }
-
-            // 2. Event-Listener für Klicks
-            themeButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const theme = button.getAttribute('data-theme');
-                    applyTheme(theme);
-                });
-            });
-
-            // 3. Gespeichertes Theme beim Laden anwenden
-            const savedTheme = localStorage.getItem('theme') || 'light'; // Standard ist 'light'
-            applyTheme(savedTheme);
-
 
             // --- D3.js-Logik (angepasst für Themes) ---
 
