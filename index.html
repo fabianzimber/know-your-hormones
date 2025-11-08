@@ -213,10 +213,9 @@
             font-weight: 500;
             transition: background-color 0.3s ease;
         }
-        /* NEU: Heatmap-Färbung über CSS-Variablen & data-value */
         .heatmap-cell[data-value="-2"] { background-color: var(--color-heatmap-neg-2); color: var(--color-heatmap-text-light); }
         .heatmap-cell[data-value="-1"] { background-color: var(--color-heatmap-neg-1); color: var(--color-heatmap-text-light); }
-        .heatmap-cell[data-value="0"]  { background-color: var(--color-heatmap-0); color: var(--color-heatmap-text-dark); }
+        .heatmap-cell[data-value="0"]  { background-color: var(--color-heatmap-0); color: var(--color-heatmap-text-light); }
         .heatmap-cell[data-value="1"]  { background-color: var(--color-heatmap-pos-1); color: var(--color-heatmap-text-light); }
         .heatmap-cell[data-value="2"]  { background-color: var(--color-heatmap-pos-2); color: var(--color-heatmap-text-dark); }
 
