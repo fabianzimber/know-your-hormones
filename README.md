@@ -22,7 +22,6 @@ The page is designed as a "one-pager" – everything in one HTML file, ideal for
 ## Features
 
 - **Multilingual & Multi-Level:** Switch between German/English and simple/advanced language levels for broad accessibility.
-- **Theme Support:** Light, Dark, and High-Contrast modes for accessibility (WCAG-compliant, implemented with CSS variables).
 - **Interactive Heatmap:** Visualizes transmitter effects with D3.js; colors and values adapt to the theme.
 - **Accordion Elements:** Expandable sections for detailed analyses of disorders.
 - **Citation Tooltips:** Hover effects for source links that are evidence-based (e.g., from PubMed, Nature, PMC).
