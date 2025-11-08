@@ -1,8 +1,8 @@
 # Compendium: Neurotransmitters & Psychophysiology
 
 [![GitHub license](https://img.shields.io/badge/license-Unlicense-blue.svg)](https://unlicense.org/)
-[![GitHub issues](https://img.shields.io/github/issues/yourusername/yourrepo.svg)](https://github.com/yourusername/yourrepo/issues)
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/yourrepo.svg)](https://github.com/yourusername/yourrepo/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/abianzimber/know-your-hormones.svg)](https://github.com/fabianzimber/know-your-hormones/issues)
+[![GitHub stars](https://img.shields.io/github/stars/abianzimber/know-your-hormones.svg)](https://github.com/abianzimber/know-your-hormones/stargazers)
 
 An interactive one-page website that provides a compendium on neurotransmitters (dopamine, norepinephrine, serotonin, and melatonin) and their role in psychophysiology. The page analyzes symptoms of deficiency/excess, core functions, interactions, and systemic connections to disorders such as depression, ADHD, and PTSD. Developed as a responsive, accessible tool for educational purposes.
 
