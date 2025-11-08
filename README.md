@@ -48,7 +48,6 @@ No further dependencies – all libraries (Tailwind, D3.js, Inter Font) are load
 
 - **Switch Language:** Click on DE/EN in the header.
 - **Difficulty Level:** Choose "Advanced" or "Simple".
-- **Switch Theme:** Click on the icons (sun/moon/contrast) in the header (not visible in code, but expandable).
 - **Explore Heatmap:** The matrix shows effect strengths (-2 to +2); hover for details (CSS-based).
 - **Check Sources:** Hover over cited terms for tooltips with links.
 
