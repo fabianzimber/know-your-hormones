@@ -1,12 +1,12 @@
 # Compendium: Neurotransmitters & Psychophysiology
 
 [![GitHub license](https://img.shields.io/badge/license-Unlicense-blue.svg)](https://unlicense.org/)
-[![GitHub issues](https://img.shields.io/github/issues/fabianzimber/know-your-hormones.svg)](https://github.com/fabianzimber/know-your-hormones/issues)
-[![GitHub stars](https://img.shields.io/github/stars/fabianzimber/know-your-hormones.svg)](https://github.com/fabianzimber/know-your-hormones/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/fabianzimber/hormone-compendium.svg)](https://github.com/fabianzimber/hormone-compendium/issues)
+[![GitHub stars](https://img.shields.io/github/stars/fabianzimber/hormone-compendium.svg)](https://github.com/fabianzimber/hormone-compendium/stargazers)
 
 An interactive one-page website that provides a compendium on neurotransmitters (dopamine, norepinephrine, serotonin, and melatonin) and their role in psychophysiology. The page analyzes symptoms of deficiency/excess, core functions, interactions, and systemic connections to disorders such as depression, ADHD, and PTSD. Developed as a responsive, accessible tool for educational purposes.
 
-**Live Demo:** [Open the Page]([https://yourusername.github.io/yourrepo/](https://fabianzimber.github.io/know-your-hormones/)) 
+**Live Demo:** [Open the Page]([https://yourusername.github.io/yourrepo/](https://fabianzimber.github.io/hormone-compendium/)) 
 
 ## Description
 
