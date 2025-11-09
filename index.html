@@ -14,12 +14,6 @@
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 
     <style>
-        /* * =========================================
-         * NEU: Theme-System mit CSS-Variablen
-         * =========================================
-        */
-
-        /* 1. Light Theme (Default) */
         :root {
             --color-bg: #f3f4f6; /* gray-100 */
             --color-bg-card: #ffffff; /* white */
@@ -47,14 +41,10 @@
             --color-heatmap-pos-1: #64748b; /* slate-500 */
             --color-heatmap-pos-2: #334155; /* slate-700 */
             --color-heatmap-text-light: #ffffff;
-            --color-heatmap-text-dark: #EEEEEE; /* gray-600 */
+            --color-heatmap-text-dark: #EEEEEE; 
         }
 
 
-        /* =========================================
-         * Globale Stile (jetzt mit Variablen)
-         * =========================================
-        */
         body {
             font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
             background-color: var(--color-bg);
@@ -62,7 +52,6 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
         
-        /* Karten-Stile */
         .card-dopamin, .card-noradrenalin, .card-serotonin, .card-melatonin {
              border: 1px solid var(--color-border);
              background-color: var(--color-bg-card);
@@ -82,8 +71,7 @@
         footer p, .text-muted {
             color: var(--color-text-muted);
         }
-
-        /* Symptom-Listen */
+        
         .symptom-list li {
             position: relative;
             padding-left: 1.75rem; 
@@ -117,12 +105,10 @@
             color: var(--color-icon-ueberdosis);
         }
         
-        /* Überschriften der Symptomlisten */
         .list-mangel-title { color: var(--color-icon-mangel); }
         .list-positiv-title { color: var(--color-icon-positiv); }
         .list-ueberdosis-title { color: var(--color-icon-ueberdosis); }
 
-        /* Heatmap */
         .heatmap-container {
             display: grid;
             grid-template-columns: 1fr repeat(6, 1fr);
@@ -164,7 +150,6 @@
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
-        /* Accordion / Details */
         details {
             background-color: var(--color-bg-card);
             border: 1px solid var(--color-border);
@@ -180,7 +165,6 @@
         details > summary::-webkit-details-marker { display: none; }
         details > summary span.arrow { color: var(--color-text-secondary); }
 
-        /* Umschalter (Sprache, Level, Theme) */
         .lang-btn, .level-btn, .theme-btn {
             font-family: ui-sans-serif, system-ui;
             font-weight: 500;
@@ -212,7 +196,6 @@
             stroke: var(--color-text-primary);
         }
 
-        /* Sichtbarkeitsregeln für Sprache & Niveau (unverändert) */
         .text-de.text-sim, .text-de.text-adv, 
         .text-en.text-sim, .text-en.text-adv { 
             display: none; 
@@ -222,7 +205,6 @@
         body:not(.lang-en-active).level-sim-active .text-de.text-sim { display: unset; }
         body.lang-en-active.level-sim-active .text-en.text-sim { display: unset; }
 
-        /* Zitat-Tooltips (angepasst an Themes) */
         .citation {
             position: relative;
             border-bottom: 2px dotted var(--color-citation-dot);
@@ -288,13 +270,11 @@
                 <span class="text-en text-sim">How it all connects: Systems and Disorders (Major Depression, ADHD, Post-traumatic stress disorder)</span>
             </p>
 
-            <!-- Sprachumschalter -->
             <div class="lang-switcher mt-4 flex justify-center items-center">
                 <button data-lang="de" class="lang-btn active p-2">DE</button>
                 <span class="text-muted mx-1">/</span>
                 <button data-lang="en" class="lang-btn p-2 text-gray-500">EN</button>
             </div>
-            <!-- Level Switcher -->
             <div class="level-switcher mt-2 flex justify-center items-center text-sm">
                 <button data-level="adv" class="level-btn active p-1 px-2">
                     <span class="text-de text-adv">Fachlich</span><span class="text-de text-sim">Fachlich</span>
@@ -308,10 +288,8 @@
             </div>
         </header>
 
-        <!-- Haupt-Raster für die vier Botenstoffe -->
         <main class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
 
-            <!-- Dopamin Karte -->
             <div class="bg-white rounded-md card-dopamin">
                 <div class="p-6">
                     <h2 class="text-3xl font-bold text-slate-700 mb-4">Dopamin</h2>
@@ -384,7 +362,6 @@
                 </div>
             </div>
 
-            <!-- Noradrenalin Karte -->
             <div class="bg-white rounded-md card-noradrenalin">
                 <div class="p-6">
                     <h2 class="text-3xl font-bold text-teal-700 mb-4">
@@ -445,7 +422,6 @@
                 </div>
             </div>
 
-            <!-- Serotonin Karte -->
             <div class="bg-white rounded-md card-serotonin">
                 <div class="p-6">
                     <h2 class="text-3xl font-bold text-amber-700 mb-4">Serotonin (5-HT)</h2>
@@ -518,7 +494,6 @@
                 </div>
             </div>
 
-            <!-- Melatonin Karte -->
             <div class="bg-white rounded-md card-melatonin">
                 <div class="p-6">
                     <h2 class="text-3xl font-bold text-indigo-700 mb-4">Melatonin</h2>
@@ -540,10 +515,10 @@
                                 <li><span class="text-de text-adv">Phasenverzögerung (DSPS)</span><span class="text-de text-sim">Später Schlafrhythmus</span><span class="text-en text-adv">Phase Delay (DSPS)</span><span class="text-en text-sim">Late sleep schedule</span></li>
                                 <li><span class="text-de text-adv">Exzessive Tagesschläfrigkeit</span><span class="text-de text-sim">Ständige Tagesmüdigkeit</span><span class="text-en text-adv">Excessive Daytime Sleepiness</span><span class="text-en text-sim">Very tired during the day</span></li>
                                 <li>
-                                    <span class="text-de text-adv"><span class="citation">Saisonale Affektive Störung (SAD)<span class="citation-tooltip"><span class="block text-xs font-bold mb-1">Quellen:</span><a href="https://www.nature.com/articles/s41380-020-0740-y" target="_blank" rel="noopener noreferrer">Frontiers: Melatonin in mood disorders</a><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4393499/" target="_blank" rel="noopener noreferrer">PubMed: Melatonin in SAD</a></span></span></span>
-                                    <span class="text-de text-sim"><span class="citation">"Winterdepression"<span class="citation-tooltip"><span class="block text-xs font-bold mb-1">Quellen:</span><a href="https://www.nature.com/articles/s41380-020-0740-y" target="_blank" rel="noopener noreferrer">Frontiers: Melatonin in mood disorders</a><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4393499/" target="_blank" rel="noopener noreferrer">PubMed: Melatonin in SAD</a></span></span></span>
-                                    <span class="text-en text-adv"><span class="citation">Seasonal Affective Disorder (SAD)<span class="citation-tooltip"><span class="block text-xs font-bold mb-1">Quellen:</span><a href="https://www.nature.com/articles/s41380-020-0740-y" target="_blank" rel="noopener noreferrer">Frontiers: Melatonin in mood disorders</a><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4393499/" target="_blank" rel="noopener noreferrer">PubMed: Melatonin in SAD</a></span></span></span>
-                                    <span class="text-en text-sim"><span class="citation">"Winter depression"<span class="citation-tooltip"><span class="block text-xs font-bold mb-1">Quellen:</span><a href="https://www.nature.com/articles/s41380-020-0740-y" target="_blank" rel="noopener noreferrer">Frontiers: Melatonin in mood disorders</a><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4393499/" target="_blank" rel="noopener noreferrer">PubMed: Melatonin in SAD</a></span></span></span>
+                                    <span class="text-de text-adv"><span class="citation">Saisonale Affektive Störung (SAD)<span class="citation-tooltip"><span class="block text-xs font-bold mb-1">Quellen:</span><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4393499/" target="_blank" rel="noopener noreferrer">PubMed: Melatonin in SAD</a></span></span></span>
+                                    <span class="text-de text-sim"><span class="citation">"Winterdepression"<span class="citation-tooltip"><span class="block text-xs font-bold mb-1">Quellen:</span><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4393499/" target="_blank" rel="noopener noreferrer">PubMed: Melatonin in SAD</a></span></span></span>
+                                    <span class="text-en text-adv"><span class="citation">Seasonal Affective Disorder (SAD)<span class="citation-tooltip"><span class="block text-xs font-bold mb-1">Quellen:</span><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4393499/" target="_blank" rel="noopener noreferrer">PubMed: Melatonin in SAD</a></span></span></span>
+                                    <span class="text-en text-sim"><span class="citation">"Winter depression"<span class="citation-tooltip"><span class="block text-xs font-bold mb-1">Quellen:</span><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4393499/" target="_blank" rel="noopener noreferrer">PubMed: Melatonin in SAD</a></span></span></span>
                                 </li>
                                 <li><span class="text-de text-adv">Immunmodulatorische Dysfunktion</span><span class="text-de text-sim">Geschwächtes Immunsystem</span><span class="text-en text-adv">Immunomodulatory Dysfunction</span><span class="text-en text-sim">Weakened immune system</span></li>
                             </ul>
@@ -593,7 +568,6 @@
 
         </main>
 
-        <!-- Sektion für Heatmap -->
         <section class="mt-12 lg:mt-16 bg-white border border-gray-300 rounded-md p-6 md:p-8">
             <h2 class="text-3xl font-semibold text-gray-900 mb-6 text-center">
                 
@@ -611,10 +585,8 @@
             </p>
 
             <div id="heatmap-container" class="heatmap-container">
-                <!-- Diese Zeile ist die obere linke Ecke -->
                 <div class="heatmap-corner"></div>
                 
-                <!-- Header-Zeile (Systeme/Spalten) -->
                 <div class="heatmap-header"><span class="text-de text-adv">Stimmung</span><span class="text-de text-sim">Stimmung</span><span class="text-en text-adv">Mood</span><span class="text-en text-sim">Mood</span></div>
                 <div class="heatmap-header"><span class="text-de text-adv">Antrieb</span><span class="text-de text-sim">Antrieb</span><span class="text-en text-adv">Drive</span><span class="text-en text-sim">Drive</span></div>
                 <div class="heatmap-header"><span class="text-de text-adv">Schlaf</span><span class="text-de text-sim">Schlaf</span><span class="text-en text-adv">Sleep</span><span class="text-en text-sim">Sleep</span></div>
@@ -622,7 +594,6 @@
                 <div class="heatmap-header"><span class="text-de text-adv">Angst</span><span class="text-de text-sim">Angst</span><span class="text-en text-adv">Anxiety</span><span class="text-en text-sim">Anxiety</span></div>
                 <div class="heatmap-header"><span class="text-de text-adv">Schmerz</span><span class="text-de text-sim">Schmerz</span><span class="text-en text-adv">Pain</span><span class="text-en text-sim">Pain</span></div>
 
-                <!-- Zeile 1: Dopamin -->
                 <div class="heatmap-label">Dopamine</div>
                 <div class="heatmap-cell" data-transmitter="Dopamin" data-system="Stimmung"></div>
                 <div class="heatmap-cell" data-transmitter="Dopamin" data-system="Antrieb"></div>
@@ -631,7 +602,6 @@
                 <div class="heatmap-cell" data-transmitter="Dopamin" data-system="Angst"></div>
                 <div class="heatmap-cell" data-transmitter="Dopamin" data-system="Schmerz"></div>
 
-                <!-- Zeile 2: Noradrenalin -->
                 <div class="heatmap-label"><span class="text-de text-adv">Noradrenalin</span><span class="text-de text-sim">Noradrenalin</span><span class="text-en text-adv">Norepinephrine</span><span class="text-en text-sim">Norepinephrine</span></div>
                 <div class="heatmap-cell" data-transmitter="Noradrenalin" data-system="Stimmung"></div>
                 <div class="heatmap-cell" data-transmitter="Noradrenalin" data-system="Antrieb"></div>
@@ -640,7 +610,6 @@
                 <div class="heatmap-cell" data-transmitter="Noradrenalin" data-system="Angst"></div>
                 <div class="heatmap-cell" data-transmitter="Noradrenalin" data-system="Schmerz"></div>
 
-                <!-- Zeile 3: Serotonin -->
                 <div class="heatmap-label">Serotonin</div>
                 <div class="heatmap-cell" data-transmitter="Serotonin" data-system="Stimmung"></div>
                 <div class="heatmap-cell" data-transmitter="Serotonin" data-system="Antrieb"></div>
@@ -649,7 +618,6 @@
                 <div class="heatmap-cell" data-transmitter="Serotonin" data-system="Angst"></div>
                 <div class="heatmap-cell" data-transmitter="Serotonin" data-system="Schmerz"></div>
 
-                <!-- Zeile 4: Melatonin -->
                 <div class="heatmap-label">Melatonin</div>
                 <div class="heatmap-cell" data-transmitter="Melatonin" data-system="Stimmung"></div>
                 <div class="heatmap-cell" data-transmitter="Melatonin" data-system="Antrieb"></div>
@@ -666,7 +634,6 @@
             </p>
         </section>
 
-        <!-- Sektion für Zusammenhänge und Wechselwirkungen -->
         <section class="mt-12 lg:mt-16 bg-white border border-gray-300 rounded-md p-6 md:p-8">
             <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-6 text-center">
                 <span class="text-de text-adv">Systemische Interdependenzen: Depression, ADHS & PTSD</span>
@@ -681,10 +648,8 @@
                 <span class="text-en text-sim">Modern models go beyond "not enough messenger substance". Disorders are often a problem of the entire system, including the stress axis (HPA) and the internal clock.</span>
             </p>
 
-            <!-- Accordion-Container für die neuen Inhalte -->
             <div class="space-y-4 max-w-5xl mx-auto">
                 
-                <!-- Accordion Item 1: Depression -->
                 <details class="group bg-white rounded-md border border-gray-300">
                     <summary class="flex justify-between items-center cursor-pointer p-4 font-semibold text-xl text-gray-800 hover:bg-gray-50 transition">
                         <span>
@@ -717,7 +682,6 @@
                     </div>
                 </details>
 
-                <!-- Accordion Item 2: ADHS -->
                 <details class="group bg-white rounded-md border border-gray-300">
                     <summary class="flex justify-between items-center cursor-pointer p-4 font-semibold text-xl text-gray-800 hover:bg-gray-50 transition">
                         <span>
@@ -750,7 +714,6 @@
                     </div>
                 </details>
 
-                <!-- Accordion Item 3: Trauma (PTSD) -->
                 <details class="group bg-white rounded-md border border-gray-300">
                     <summary class="flex justify-between items-center cursor-pointer p-4 font-semibold text-xl text-gray-800 hover:bg-gray-50 transition">
                         <span>
@@ -780,14 +743,12 @@
                 </details>
             </div>
 
-            <!-- Fazit / Gemeinsames Bild -->
             <div class="mt-10 pt-6 border-t border-gray-300 max-w-5xl mx-auto">
                 <h3 class="text-2xl font-semibold text-gray-800 mb-4">
                     <span class="text-de text-adv">Synthese: Ein integratives Modell</span><span class="text-de text-sim">Zusammenfassung: Das Gesamtbild</span>
                     <span class="text-en text-adv">Synthesis: An Integrative Model</span><span class="text-en text-sim">Summary: The Big Picture</span>
                 </h3>
                 
-                <!-- KORRIGIERTER BLOCK: 'citation' wurde NACH INNEN verschoben, in jede Sprach-Variante -->
                 <p class="text-gray-700 text-lg leading-relaxed">
                     <span class="text-de text-adv">Daraus ergibt sich ein <span class="citation">integratives Modell<span class="citation-tooltip"><span class="block text-xs font-bold mb-1">Quellen:</span><a href="https://www.ncbi.nlm.nih.gov/books/NBK539894/" target="_blank" rel="noopener noreferrer">StatPearls: Overview of Neurotransmitters</a><a href="https://www.nature.com/articles/s41392-024-01738-y" target="_blank" rel="noopener noreferrer">Nature: Modern overview of MDD</a><a href="https://www.nature.com/articles/s41398-020-0694-0" target="_blank" rel="noopener noreferrer">Nature: Circadian rhythm and psychiatric illness</a></span></span>: Dopamin und Noradrenalin bestimmen die Effizienz der Exekutivfunktionen des präfrontalen Cortex (PFC), relevant bei ADHS und Antriebsdefiziten. Serotonin moduliert die Affektregulation, Angst und Impulskontrolle und dient als biochemische Vorstufe für Melatonin. Melatonin als primärer Taktgeber (Zeitgeber) synchronisiert den Tag-Nacht-Rhythmus und die damit verbundenen neurobiologischen Reparaturphasen. Chronischer Stress, Traumata oder persistierende Schlafstörungen führen zur Desynchronisation dieses Systems: Melatoninphasen verschieben sich, Monoamin-Signale geraten in Dysbalance, die HPA-Achse hyperaktiviert wird – und je nach neurobiologischer Vulnerabilität kippt das System in Richtung einer affektiven Störung, einer ADHS-Symptomverstärkung oder eines Trauma-Spektrum-Bildes.</span>
                     <span class="text-de text-sim">Zusammenfassend: Dopamin und Noradrenalin steuern Fokus und Antrieb (wichtig bei ADHS/Depression). Serotonin steuert Stimmung und Angst und ist die Vorstufe von Melatonin. Melatonin steuert die innere Uhr und den Schlaf. <span class="citation">Chronischer Stress, Trauma oder schlechter Schlaf<span class="citation-tooltip"><span class="block text-xs font-bold mb-1">Quellen:</span><a href="https://www.ncbi.nlm.nih.gov/books/NBK539894/" target="_blank" rel="noopener noreferrer">StatPearls: Overview of Neurotransmitters</a><a href="https://www.nature.com/articles/s41392-024-01738-y" target="_blank" rel="noopener noreferrer">Nature: Modern overview of MDD</a><a href="https://www.nature.com/articles/s41398-020-0694-0" target="_blank" rel="noopener noreferrer">Nature: Circadian rhythm and psychiatric illness</a></span></span> bringen dieses ganze System durcheinander: Die innere Uhr verschiebt sich, die Botenstoffe geraten aus dem Gleichgewicht, die Stress-Achse läuft heiß. Je nach Veranlagung führt dies dann zu Depression, stärkeren ADHS-Symptomen oder Trauma-Folgen.</span>
@@ -809,13 +770,11 @@
         </footer>
     </div>
 
-    <!-- D3.js Script zum Füllen der Heatmap UND Sprachumschaltung -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             
             const body = document.body;
 
-            // --- Sprachumschalter-Logik ---
             const langButtons = document.querySelectorAll('.lang-btn');
             langButtons.forEach(button => {
                 button.addEventListener('click', () => {
@@ -832,7 +791,6 @@
                 });
             });
 
-            // --- Level-Umschalter-Logik ---
             const levelButtons = document.querySelectorAll('.level-btn');
             levelButtons.forEach(button => {
                 button.addEventListener('click', () => {
@@ -849,17 +807,13 @@
                 });
             });
 
-            // --- D3.js-Logik (angepasst für Themes) ---
-
-            // 1. Datenmatrix (unverändert)
-            const data = {
+            /const data = {
                 'Dopamin': { 'Stimmung': 1, 'Antrieb': 2, 'Schlaf': -1, 'Kognition': 2, 'Angst': 0, 'Schmerz': 1 },
                 'Noradrenalin': { 'Stimmung': 1, 'Antrieb': 2, 'Schlaf': -1, 'Kognition': 2, 'Angst': 2, 'Schmerz': -1 },
                 'Serotonin': { 'Stimmung': 2, 'Antrieb': 0, 'Schlaf': 1, 'Kognition': 0, 'Angst': -2, 'Schmerz': -2 },
                 'Melatonin': { 'Stimmung': 0, 'Antrieb': -2, 'Schlaf': 2, 'Kognition': -1, 'Angst': 0, 'Schmerz': 0 }
             };
 
-            // 2. D3-Datenbindung (Setzt jetzt data-value statt style)
             d3.selectAll('.heatmap-cell')
                 .each(function() {
                     const cell = d3.select(this);
@@ -869,17 +823,13 @@
                     const value = data[transmitter] ? data[transmitter][system] : undefined;
 
                     if (value !== undefined) {
-                        cell.attr('data-value', value); // Setzt das data-Attribut
-                        cell.text(value); // Schreibt den Text
+                        cell.attr('data-value', value);
+                        cell.text(value);
                     } else {
                         cell.attr('data-value', 'na');
                         cell.text('N/A');
                     }
                 });
-            
-            // Die Färbung selbst wird jetzt vollständig über die CSS-Regeln 
-            // .heatmap-cell[data-value="..."] gesteuert, die CSS-Variablen verwenden.
-            // Dadurch ist die D3-Farbskala im JS nicht mehr nötig.
         });
     </script>
 
